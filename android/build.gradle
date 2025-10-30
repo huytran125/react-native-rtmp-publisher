@@ -25,12 +25,6 @@ def isNewArchitectureEnabled() {
 android {
   compileSdkVersion safeExtGet('Rtmp_compileSdkVersion', 31)
   
-  if (isNewArchitectureEnabled()) {
-    buildFeatures {
-      prefab true
-    }
-  }
-  
   defaultConfig {
     minSdkVersion safeExtGet('Rtmp_minSdkVersion', 21)
     targetSdkVersion safeExtGet('Rtmp_targetSdkVersion', 31)
@@ -50,16 +44,6 @@ android {
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_11
     targetCompatibility JavaVersion.VERSION_11
-  }
-  
-  sourceSets {
-    main {
-      if (isNewArchitectureEnabled()) {
-        java.srcDirs += [
-          "build/generated/source/codegen/java"
-        ]
-      }
-    }
   }
 }
 

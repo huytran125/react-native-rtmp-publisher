@@ -225,11 +225,13 @@ For live stream, Youtube gives you stream url and stream key, you can place the 
 
 ### React Native New Architecture Support
 
-This library now fully supports the React Native New Architecture (Fabric and TurboModules). It works seamlessly with both:
-- **Old Architecture** (Bridge) - Default
-- **New Architecture** (Fabric + TurboModules) - When enabled in your project
+This library supports the React Native New Architecture using a Java-based TurboModule implementation. It works seamlessly with both:
+- **Old Architecture** (Bridge) - Default, uses standard NativeModules
+- **New Architecture** (TurboModules) - Uses TurboReactPackage when enabled
 
-The library automatically detects which architecture is enabled and uses the appropriate implementation. No additional configuration needed!
+The library automatically detects which architecture is enabled at runtime. No additional configuration or code generation needed!
+
+**Note:** This implementation uses `TurboReactPackage` (Java) instead of C++ codegen, making it compatible with existing Java-only modules while still supporting the new architecture.
 
 #### Enabling New Architecture in Your Project
 
@@ -237,6 +239,8 @@ Add to your `android/gradle.properties`:
 ```properties
 newArchEnabled=true
 ```
+
+The library will automatically use TurboModule when this flag is set.
 
 ### RTMPS Support (Android)
 

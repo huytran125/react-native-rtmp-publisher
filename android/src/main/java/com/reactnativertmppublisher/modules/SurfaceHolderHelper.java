@@ -6,7 +6,7 @@ import android.view.SurfaceHolder;
 import androidx.annotation.NonNull;
 
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.pedro.rtplibrary.rtmp.RtmpCamera1;
+import com.pedro.library.rtmp.RtmpCamera1;
 
 public class SurfaceHolderHelper implements SurfaceHolder.Callback {
   private final RtmpCamera1 _rtmpCamera1;

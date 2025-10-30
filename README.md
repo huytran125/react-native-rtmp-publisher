@@ -269,7 +269,7 @@ The library will automatically detect the protocol and use the appropriate conne
 
 ## Used Native Packages
 
-- Android: [RootEncoder](https://github.com/pedroSG94/RootEncoder) [2.6.6]
+- Android: [RootEncoder](https://github.com/pedroSG94/RootEncoder) [2.6.5]
 - iOS: [HaishinKit.swift](https://github.com/shogo4405/HaishinKit.swift) [1.2.7]
 
 ## Contributing

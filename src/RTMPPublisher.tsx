@@ -16,7 +16,13 @@ import type {
   AudioInputType,
 } from './types';
 
-const RTMPModule = NativeModules.RTMPPublisher;
+// Use TurboModule if available (New Architecture), otherwise fall back to old architecture
+let RTMPModule: any;
+try {
+  RTMPModule = require('./specs/NativeRTMPPublisher').default;
+} catch (e) {
+  RTMPModule = NativeModules.RTMPPublisher;
+}
 export interface RTMPPublisherProps {
   testID?: string;
   style?: ViewStyle;

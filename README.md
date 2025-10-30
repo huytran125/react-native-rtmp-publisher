@@ -160,8 +160,10 @@ async function publisherActions() {
 
 |     Name     |   Type   | Required |              Description              |
 | :----------: | :------: | :------: | :-----------------------------------: |
-| `streamURL`  | `string` |  `true`  | Publish URL address with RTM Protocol |
+| `streamURL`  | `string` |  `true`  | Publish URL address with RTMP/RTMPS Protocol |
 | `streamName` | `string` |  `true`  |          Stream name or key           |
+
+**Note:** Android supports multiple protocols: `rtmp://` (standard), `rtmps://` (TLS/SSL), `rtmpt://` (HTTP tunnel), `rtmpts://` (HTTPS tunnel). iOS only supports standard `rtmp://` protocol.
 
 ### Youtube Example
 
@@ -219,9 +221,55 @@ For live stream, Youtube gives you stream url and stream key, you can place the 
 | `AudioInputType`          | `BLUETOOTH_HEADSET`, `SPEAKER`, `WIRED_HEADSET`     |
 
 * AudioInputType: WIRED_HEADSET type supporting in only iOS. On Android it affects nothing. If a wired headset connected to Android device, device uses it as default.
+## Features
+
+### React Native New Architecture Support
+
+This library now fully supports the React Native New Architecture (Fabric and TurboModules). It works seamlessly with both:
+- **Old Architecture** (Bridge) - Default
+- **New Architecture** (Fabric + TurboModules) - When enabled in your project
+
+The library automatically detects which architecture is enabled and uses the appropriate implementation. No additional configuration needed!
+
+#### Enabling New Architecture in Your Project
+
+Add to your `android/gradle.properties`:
+```properties
+newArchEnabled=true
+```
+
+### RTMPS Support (Android)
+
+The library now supports multiple RTMP variants on Android:
+
+- **RTMP** (`rtmp://`) - Standard RTMP protocol (port 1935)
+- **RTMPS** (`rtmps://`) - RTMP over TLS/SSL for secure streaming (port 443)
+- **RTMPT** (`rtmpt://`) - RTMP tunneled over HTTP (port 80)
+- **RTMPTS** (`rtmpts://`) - RTMP tunneled over HTTPS (port 443)
+
+Simply use the appropriate protocol scheme in your stream URL:
+
+```js
+// Secure RTMP over TLS/SSL
+<RTMPPublisher
+  streamURL="rtmps://your-secure-publish-url"
+  streamName="stream-name"
+  ...
+/>
+
+// Tunneled RTMP over HTTPS
+<RTMPPublisher
+  streamURL="rtmpts://your-tunnel-url"
+  streamName="stream-name"
+  ...
+/>
+```
+
+The library will automatically detect the protocol and use the appropriate connection method.
+
 ## Used Native Packages
 
-- Android: [rtmp-rtsp-stream-client-java](https://github.com/pedroSG94/rtmp-rtsp-stream-client-java) [2.2.2]
+- Android: [RootEncoder](https://github.com/pedroSG94/RootEncoder) [2.6.6]
 - iOS: [HaishinKit.swift](https://github.com/shogo4405/HaishinKit.swift) [1.2.7]
 
 ## Contributing

@@ -12,7 +12,7 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
-import com.pedro.rtplibrary.rtmp.RtmpCamera1;
+import com.pedro.library.rtmp.RtmpCamera1;
 import com.reactnativertmppublisher.enums.AudioInputType;
 import com.reactnativertmppublisher.enums.StreamState;
 import com.reactnativertmppublisher.interfaces.ConnectionListener;
@@ -142,7 +142,7 @@ public class Publisher {
   }
 
   public boolean hasCongestion() {
-    return _rtmpCamera.hasCongestion();
+    return _rtmpCamera.getStreamClient().hasCongestion();
   }
 
   public boolean isAudioMuted() {

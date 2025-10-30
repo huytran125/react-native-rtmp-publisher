@@ -149,5 +149,13 @@
         }
       ]
     ]
+  },
+  "codegenConfig": {
+    "name": "RTMPPublisherSpec",
+    "type": "all",
+    "jsSrcsDir": "src/specs",
+    "android": {
+      "javaPackageName": "com.reactnativertmppublisher"
+    }
   }
 }

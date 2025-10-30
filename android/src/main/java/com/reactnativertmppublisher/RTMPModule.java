@@ -10,7 +10,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.reactnativertmppublisher.enums.AudioInputType;
 
 public class RTMPModule extends ReactContextBaseJavaModule {
-  private final String REACT_MODULE_NAME = "RTMPPublisher";
+  public static final String NAME = "RTMPPublisher";
 
   public RTMPModule(@Nullable ReactApplicationContext reactContext) {
     super(reactContext);
@@ -19,7 +19,7 @@ public class RTMPModule extends ReactContextBaseJavaModule {
   @NonNull
   @Override
   public String getName() {
-    return REACT_MODULE_NAME;
+    return NAME;
   }
 
   @ReactMethod

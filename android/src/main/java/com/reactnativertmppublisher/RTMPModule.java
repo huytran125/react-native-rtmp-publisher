@@ -1,5 +1,6 @@
 package com.reactnativertmppublisher;
 
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -11,14 +12,17 @@ import com.reactnativertmppublisher.enums.AudioInputType;
 
 public class RTMPModule extends ReactContextBaseJavaModule {
   public static final String NAME = "RTMPPublisher";
+  private static final String TAG = "RTMPModule";
 
   public RTMPModule(@Nullable ReactApplicationContext reactContext) {
     super(reactContext);
+    Log.d(TAG, "RTMPModule: Constructor called");
   }
 
   @NonNull
   @Override
   public String getName() {
+    Log.d(TAG, "getName: Returning module name: " + NAME);
     return NAME;
   }
 

@@ -33,5 +33,14 @@ export interface NativeRTMPPublisherProps {
   ) => void;
 }
 
-// Using standard requireNativeComponent (compatible with both old and new architecture)
-export default requireNativeComponent<NativeRTMPPublisherProps>('RTMPPublisher');
+// Use Fabric component if available (New Architecture), otherwise fall back to old architecture
+let RTMPPublisherComponent: any;
+try {
+  RTMPPublisherComponent =
+    require('./specs/RTMPPublisherViewNativeComponent').default;
+} catch (e) {
+  RTMPPublisherComponent =
+    requireNativeComponent<NativeRTMPPublisherProps>('RTMPPublisher');
+}
+
+export default RTMPPublisherComponent;

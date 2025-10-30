@@ -19,6 +19,7 @@ import com.reactnativertmppublisher.interfaces.ConnectionListener;
 import com.reactnativertmppublisher.utils.ObjectCaster;
 
 public class Publisher {
+  private static final String TAG = "Publisher";
   private final SurfaceView _surfaceView;
   private final RtmpCamera1 _rtmpCamera;
   private final ThemedReactContext _reactContext;
@@ -29,16 +30,34 @@ public class Publisher {
   BluetoothDeviceConnector _bluetoothDeviceConnector;
 
   public Publisher(ThemedReactContext reactContext, SurfaceView surfaceView) {
-    _reactContext = reactContext;
-    _surfaceView = surfaceView;
-    _rtmpCamera = new RtmpCamera1(surfaceView, _connectionChecker);
-    _bluetoothDeviceConnector = new BluetoothDeviceConnector(reactContext);
+    Log.d(TAG, "Publisher: Constructor started");
+    try {
+      _reactContext = reactContext;
+      _surfaceView = surfaceView;
+      
+      Log.d(TAG, "Publisher: Creating RtmpCamera1");
+      _rtmpCamera = new RtmpCamera1(surfaceView, _connectionChecker);
+      Log.d(TAG, "Publisher: RtmpCamera1 created successfully");
+      
+      Log.d(TAG, "Publisher: Creating BluetoothDeviceConnector");
+      _bluetoothDeviceConnector = new BluetoothDeviceConnector(reactContext);
+      Log.d(TAG, "Publisher: BluetoothDeviceConnector created successfully");
 
-    _bluetoothDeviceConnector.addListener(createBluetoothDeviceListener());
-    _connectionChecker.addListener(createConnectionListener());
-    _mAudioManager = (AudioManager) reactContext.getSystemService(Context.AUDIO_SERVICE);
+      Log.d(TAG, "Publisher: Adding listeners");
+      _bluetoothDeviceConnector.addListener(createBluetoothDeviceListener());
+      _connectionChecker.addListener(createConnectionListener());
+      
+      Log.d(TAG, "Publisher: Getting AudioManager");
+      _mAudioManager = (AudioManager) reactContext.getSystemService(Context.AUDIO_SERVICE);
+      Log.d(TAG, "Publisher: AudioManager retrieved");
 
-    setAudioInput(AudioInputType.SPEAKER);
+      Log.d(TAG, "Publisher: Setting audio input to SPEAKER");
+      setAudioInput(AudioInputType.SPEAKER);
+      Log.d(TAG, "Publisher: Constructor completed successfully");
+    } catch (Exception e) {
+      Log.e(TAG, "Publisher: Error in constructor", e);
+      throw e;
+    }
   }
 
   public RtmpCamera1 getRtmpCamera() {

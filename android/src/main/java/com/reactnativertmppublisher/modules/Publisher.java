@@ -39,12 +39,21 @@ public class Publisher {
       _rtmpCamera = new RtmpCamera1(surfaceView, _connectionChecker);
       Log.d(TAG, "Publisher: RtmpCamera1 created successfully");
       
-      Log.d(TAG, "Publisher: Creating BluetoothDeviceConnector");
-      _bluetoothDeviceConnector = new BluetoothDeviceConnector(reactContext);
-      Log.d(TAG, "Publisher: BluetoothDeviceConnector created successfully");
+      // Try to create BluetoothDeviceConnector, but don't crash if permission is missing
+      try {
+        Log.d(TAG, "Publisher: Creating BluetoothDeviceConnector");
+        _bluetoothDeviceConnector = new BluetoothDeviceConnector(reactContext);
+        _bluetoothDeviceConnector.addListener(createBluetoothDeviceListener());
+        Log.d(TAG, "Publisher: BluetoothDeviceConnector created successfully");
+      } catch (SecurityException e) {
+        Log.w(TAG, "Publisher: Bluetooth permission not granted, Bluetooth support disabled", e);
+        _bluetoothDeviceConnector = null;
+      } catch (Exception e) {
+        Log.w(TAG, "Publisher: Failed to create BluetoothDeviceConnector, Bluetooth support disabled", e);
+        _bluetoothDeviceConnector = null;
+      }
 
-      Log.d(TAG, "Publisher: Adding listeners");
-      _bluetoothDeviceConnector.addListener(createBluetoothDeviceListener());
+      Log.d(TAG, "Publisher: Adding connection listener");
       _connectionChecker.addListener(createConnectionListener());
       
       Log.d(TAG, "Publisher: Getting AudioManager");
@@ -225,36 +234,48 @@ public class Publisher {
   }
 
   public void setAudioInput(@NonNull AudioInputType audioInputType){
-    System.out.println(audioInputType);
-    switch (audioInputType){
-      case BLUETOOTH_HEADSET: {
-        System.out.println("ble");
-        try{
-          _mAudioManager.startBluetoothSco();
-          _mAudioManager.setBluetoothScoOn(true);
-          break;
-        }
-        catch (Exception error){
-          System.out.println(error);
-          break;
-        }
-      }
-
-      case SPEAKER:{
-        try{
-          if(_mAudioManager.isBluetoothScoOn()){
-            _mAudioManager.stopBluetoothSco();
-            _mAudioManager.setBluetoothScoOn(false);
+    Log.d(TAG, "setAudioInput: Setting audio input type: " + audioInputType);
+    try {
+      switch (audioInputType){
+        case BLUETOOTH_HEADSET: {
+          Log.d(TAG, "setAudioInput: Setting BLUETOOTH_HEADSET");
+          try{
+            _mAudioManager.startBluetoothSco();
+            _mAudioManager.setBluetoothScoOn(true);
+            Log.d(TAG, "setAudioInput: Bluetooth SCO started");
+            break;
           }
-
-          _mAudioManager.setSpeakerphoneOn(true);
-          break;
+          catch (SecurityException e){
+            Log.w(TAG, "setAudioInput: Bluetooth permission denied, falling back to speaker", e);
+            _mAudioManager.setSpeakerphoneOn(true);
+            break;
+          }
+          catch (Exception error){
+            Log.e(TAG, "setAudioInput: Error setting Bluetooth audio", error);
+            break;
+          }
         }
-        catch (Exception error){
-          System.out.println(error);
-          break;
+
+        case SPEAKER:{
+          Log.d(TAG, "setAudioInput: Setting SPEAKER");
+          try{
+            if(_mAudioManager.isBluetoothScoOn()){
+              _mAudioManager.stopBluetoothSco();
+              _mAudioManager.setBluetoothScoOn(false);
+            }
+
+            _mAudioManager.setSpeakerphoneOn(true);
+            Log.d(TAG, "setAudioInput: Speaker enabled");
+            break;
+          }
+          catch (Exception error){
+            Log.e(TAG, "setAudioInput: Error setting speaker audio", error);
+            break;
+          }
         }
       }
+    } catch (Exception e) {
+      Log.e(TAG, "setAudioInput: Unexpected error", e);
     }
   }
   //endregion

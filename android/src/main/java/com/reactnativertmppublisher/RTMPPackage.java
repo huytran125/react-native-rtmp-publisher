@@ -2,72 +2,33 @@ package com.reactnativertmppublisher;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-import com.facebook.react.TurboReactPackage;
+import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.module.model.ReactModuleInfo;
-import com.facebook.react.module.model.ReactModuleInfoProvider;
 import com.facebook.react.uimanager.ViewManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class RTMPPackage extends TurboReactPackage {
+public class RTMPPackage implements ReactPackage {
   private static final String TAG = "RTMPPackage";
-  
-  @Nullable
+
+  @NonNull
   @Override
-  public NativeModule getModule(@NonNull String name, @NonNull ReactApplicationContext reactContext) {
-    Log.d(TAG, "getModule: Requested module name: " + name);
+  public List<NativeModule> createNativeModules(@NonNull ReactApplicationContext reactContext) {
+    Log.d(TAG, "createNativeModules: Starting to create RTMP modules");
     try {
-      if (name.equals(RTMPModule.NAME)) {
-        Log.d(TAG, "getModule: Creating RTMPModule");
-        RTMPModule module = new RTMPModule(reactContext);
-        Log.d(TAG, "getModule: RTMPModule created successfully");
-        return module;
-      } else {
-        Log.d(TAG, "getModule: Module not found: " + name);
-        return null;
-      }
+      List<NativeModule> modules = new ArrayList<>();
+      Log.d(TAG, "createNativeModules: Creating RTMPModule");
+      modules.add(new RTMPModule(reactContext));
+      Log.d(TAG, "createNativeModules: RTMPModule created successfully");
+      return modules;
     } catch (Exception e) {
-      Log.e(TAG, "getModule: Error creating module " + name, e);
+      Log.e(TAG, "createNativeModules: Error creating modules", e);
       throw e;
     }
-  }
-
-  @Override
-  public ReactModuleInfoProvider getReactModuleInfoProvider() {
-    Log.d(TAG, "getReactModuleInfoProvider: Called");
-    return () -> {
-      try {
-        final Map<String, ReactModuleInfo> moduleInfos = new HashMap<>();
-        boolean isTurboModule = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
-        Log.d(TAG, "getReactModuleInfoProvider: IS_NEW_ARCHITECTURE_ENABLED = " + isTurboModule);
-        
-        moduleInfos.put(
-          RTMPModule.NAME,
-          new ReactModuleInfo(
-            RTMPModule.NAME,
-            RTMPModule.NAME,
-            false, // canOverrideExistingModule
-            false, // needsEagerInit
-            true, // hasConstants
-            false, // isCxxModule
-            isTurboModule // isTurboModule
-          )
-        );
-        Log.d(TAG, "getReactModuleInfoProvider: Module info created successfully");
-        return moduleInfos;
-      } catch (Exception e) {
-        Log.e(TAG, "getReactModuleInfoProvider: Error", e);
-        throw e;
-      }
-    };
   }
 
   @NonNull
@@ -76,8 +37,7 @@ public class RTMPPackage extends TurboReactPackage {
     Log.d(TAG, "createViewManagers: Starting to create view managers");
     try {
       Log.d(TAG, "createViewManagers: Creating RTMPManager");
-      RTMPManager manager = new RTMPManager();
-      List<ViewManager> managers = Collections.singletonList(manager);
+      List<ViewManager> managers = Collections.singletonList(new RTMPManager());
       Log.d(TAG, "createViewManagers: RTMPManager created successfully");
       return managers;
     } catch (Exception e) {

@@ -78,6 +78,8 @@ repositories {
 dependencies {
   //noinspection GradleDynamicVersion
   implementation fileTree(dir: 'libs', include: ['*.jar'])
-  implementation 'com.github.pedroSG94.RootEncoder:library:2.6.6'
+  implementation "com.github.pedroSG94.RootEncoder:library:2.6.5"
+  //Optional, allow use CameraXSource and CameraUvcSource 
+  implementation "com.github.pedroSG94.RootEncoder:extra-sources:2.6.5"
   implementation "com.facebook.react:react-native:+"  // From node_modules
 }
